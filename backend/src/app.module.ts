@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import * as path from 'node:path';
 
 import { configProvider } from './app.config.provider';
@@ -19,6 +20,7 @@ import { OrderService } from './order/order.service';
       rootPath: path.join(__dirname, '..', 'public'),
       renderPath: 'content/afisha/*',
     }),
+    MongooseModule.forRoot(configProvider.useValue.DATABASE_URL),
   ],
   controllers: [FilmsController, OrderController],
   providers: [configProvider, FilmsService, OrderService],
