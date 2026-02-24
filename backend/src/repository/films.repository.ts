@@ -3,14 +3,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { GetFilmDto, IFilmSchedule } from 'src/films/dto/films.dto';
 
-const ScheduleSchema = new mongoose.Schema({
-  id: { type: String, required: true },
-  daytime: { type: String, required: true },
-  hall: { type: Number, required: true },
-  rows: { type: Number, required: true },
-  seats: { type: Number, required: true },
-  price: { type: Number, required: true },
-});
+const ScheduleSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true },
+    daytime: { type: String, required: true },
+    hall: { type: Number, required: true },
+    rows: { type: Number, required: true },
+    seats: { type: Number, required: true },
+    price: { type: Number, required: true },
+  },
+  { _id: false },
+);
 
 export const FilmSchema = new mongoose.Schema({
   id: { type: String, required: true },
