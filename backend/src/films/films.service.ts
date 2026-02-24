@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FilmsMongoDbRepository } from 'src/repository/films.repository';
-import { GetFilmsDto } from './dto/films.dto';
+import { GetFilmScheduleDto, GetFilmsDto } from './dto/films.dto';
 
 @Injectable()
 export class FilmsService {
@@ -8,7 +8,15 @@ export class FilmsService {
 
   async findAll(): Promise<GetFilmsDto> {
     const items = await this.filmsRepository.findAll();
-    console.log(items.length);
+    return {
+      total: items.length,
+      items: items,
+    };
+  }
+
+  async findScheduleById(id: string): Promise<GetFilmScheduleDto> {
+    const items = await this.filmsRepository.findScheduleById(id);
+    console.log(items);
     return {
       total: items.length,
       items: items,

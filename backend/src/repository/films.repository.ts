@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { GetFilmDto } from 'src/films/dto/films.dto';
+import { GetFilmDto, IFilmSchedule } from 'src/films/dto/films.dto';
 
 const ScheduleSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -47,5 +47,11 @@ export class FilmsMongoDbRepository {
   async findAll(): Promise<GetFilmDto[]> {
     const items = await this.filmModel.find({});
     return items.map(this.getFilmMapperFn());
+  }
+
+  async findScheduleById(id: string): Promise<IFilmSchedule[]> {
+    const film = await this.filmModel.findOne({ id: id });
+    console.log(film);
+    return film.schedule;
   }
 }

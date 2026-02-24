@@ -1,4 +1,3 @@
-//TODO описать DTO для запросов к /films
 export class GetFilmDto {
   id: string;
   rating: number;
@@ -14,4 +13,19 @@ export class GetFilmDto {
 export class GetFilmsDto {
   total: number;
   items: GetFilmDto[];
+}
+
+export interface IFilmSchedule {
+  id: string;
+  daytime: string;
+  hall: string;
+  rows: number;
+  seats: number;
+  price: number;
+  taken: string[];
+}
+
+export class GetFilmScheduleDto {
+  total: number;
+  items: IFilmSchedule[];
 }
