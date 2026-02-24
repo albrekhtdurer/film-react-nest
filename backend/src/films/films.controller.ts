@@ -1,10 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
+import { FilmsService } from './films.service';
 
 @Controller('films')
 export class FilmsController {
+  constructor(private readonly filmsService: FilmsService) {}
+
   @Get()
-  findAll(): string {
-    return 'Получили список всех фильмов';
+  async findAll() {
+    try {
+      const data = this.filmsService.findAll();
+      return data;
+    } catch (err) {
+      throw err;
+    }
   }
 
   @Get(':id/schedule')

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import mongoose, { Mongoose } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { GetFilmDto } from 'src/films/dto/films.dto';
 
 const ScheduleSchema = new mongoose.Schema({
@@ -11,7 +12,7 @@ const ScheduleSchema = new mongoose.Schema({
   price: { type: Number, required: true },
 });
 
-const FilmSchema = new mongoose.Schema({
+export const FilmSchema = new mongoose.Schema({
   id: { type: String, required: true },
   rating: { type: Number, required: true },
   director: { type: Number, required: true },
@@ -24,13 +25,9 @@ const FilmSchema = new mongoose.Schema({
   schedule: { type: [ScheduleSchema], required: true },
 });
 
-const Film = mongoose.model('Film', FilmSchema);
-
-export default Film;
-
 @Injectable()
 export class FilmsMongoDbRepository {
-  constructor(private connection: Mongoose) {}
+  constructor(@InjectModel('Film') private filmModel) {}
   private getFilmMapperFn(): (Film) => GetFilmDto {
     return (root) => {
       return {
@@ -48,7 +45,7 @@ export class FilmsMongoDbRepository {
   }
 
   async findAll(): Promise<GetFilmDto[]> {
-    const items = await Film.find({});
+    const items = await this.filmModel.find({});
     return items.map(this.getFilmMapperFn());
   }
 }

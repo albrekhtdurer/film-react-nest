@@ -9,6 +9,10 @@ import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { OrderService } from './order/order.service';
+import {
+  FilmsMongoDbRepository,
+  FilmSchema,
+} from './repository/films.repository';
 
 @Module({
   imports: [
@@ -20,9 +24,15 @@ import { OrderService } from './order/order.service';
       rootPath: path.join(__dirname, '..', 'public'),
       renderPath: 'content/afisha/*',
     }),
-    MongooseModule.forRoot(configProvider.useValue.DATABASE_URL),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
+    MongooseModule.forFeature([{ name: 'Film', schema: FilmSchema }]),
   ],
   controllers: [FilmsController, OrderController],
-  providers: [configProvider, FilmsService, OrderService],
+  providers: [
+    configProvider,
+    FilmsService,
+    OrderService,
+    FilmsMongoDbRepository,
+  ],
 })
 export class AppModule {}
