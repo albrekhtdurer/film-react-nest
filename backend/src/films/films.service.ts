@@ -14,9 +14,8 @@ export class FilmsService {
     };
   }
 
-  async findScheduleById(id: string): Promise<GetFilmScheduleDto> {
-    const items = await this.filmsRepository.findScheduleById(id);
-    console.log(items);
+  async findScheduleByFilmId(id: string): Promise<GetFilmScheduleDto> {
+    const items = await this.filmsRepository.findScheduleByFilmId(id);
     return {
       total: items.length,
       items: items,

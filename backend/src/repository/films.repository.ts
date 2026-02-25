@@ -11,14 +11,15 @@ const ScheduleSchema = new mongoose.Schema(
     rows: { type: Number, required: true },
     seats: { type: Number, required: true },
     price: { type: Number, required: true },
+    taken: { type: [String] },
   },
-  { _id: false },
+  //{ _id: false },
 );
 
 export const FilmSchema = new mongoose.Schema({
   id: { type: String, required: true },
   rating: { type: Number, required: true },
-  director: { type: Number, required: true },
+  director: { type: String, required: true },
   tags: { type: [String], required: true },
   image: { type: String, required: true },
   cover: { type: String, required: true },
@@ -52,9 +53,29 @@ export class FilmsMongoDbRepository {
     return items.map(this.getFilmMapperFn());
   }
 
-  async findScheduleById(id: string): Promise<IFilmSchedule[]> {
+  async findScheduleByFilmId(id: string): Promise<IFilmSchedule[]> {
     const film = await this.filmModel.findOne({ id: id });
-    console.log(film);
     return film.schedule;
+  }
+
+  async findScheduleAndUpdateTaken(
+    filmId: string,
+    sessionId: string,
+    taken: string,
+  ): Promise<IFilmSchedule[]> {
+    const film = await this.filmModel.findOne({
+      id: filmId,
+      'schedule.id': sessionId,
+    });
+    const sessionIndex = film.schedule.findIndex((session) => {
+      return session.id === sessionId;
+    });
+    if (film.schedule[sessionIndex].taken?.length > 0) {
+      film.schedule[sessionIndex].taken.push(taken);
+    } else {
+      film.schedule[sessionIndex].taken = [taken];
+    }
+    await film.save();
+    return film;
   }
 }

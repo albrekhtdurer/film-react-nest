@@ -16,9 +16,9 @@ export class FilmsController {
   }
 
   @Get(':id/schedule')
-  async findScheduleById(@Param('id') id: string) {
+  async findScheduleByFilmId(@Param('id') id: string) {
     try {
-      const data = this.filmsService.findScheduleById(id);
+      const data = this.filmsService.findScheduleByFilmId(id);
       return data;
     } catch (err) {
       throw err;
