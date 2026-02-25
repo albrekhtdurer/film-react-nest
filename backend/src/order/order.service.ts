@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FilmsMongoDbRepository } from 'src/repository/films.repository';
-import { CreateOrderDto } from './dto/order.dto';
+import { TicketDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
   constructor(private readonly filmsRepository: FilmsMongoDbRepository) {}
 
-  private async getSessionInfos(orderItems: CreateOrderDto[]) {
+  private async getSessionInfos(orderItems: TicketDto[]) {
     const sessionInfos = [];
     for (const order of orderItems) {
       const filmData = await this.filmsRepository.findScheduleByFilmId(
@@ -27,7 +27,7 @@ export class OrderService {
     return Boolean(taken.includes(seat));
   }
 
-  private async isTakenSeatInOrder(orderItems: CreateOrderDto[]) {
+  private async isTakenSeatInOrder(orderItems: TicketDto[]) {
     const sessionInfos = await this.getSessionInfos(orderItems);
     let result = false;
     orderItems.forEach((item, index) => {
@@ -39,7 +39,7 @@ export class OrderService {
     return result;
   }
 
-  async createOrder(orderItems: CreateOrderDto[]) {
+  async createOrder(orderItems: TicketDto[]) {
     if (await this.isTakenSeatInOrder(orderItems)) {
       throw new BadRequestException(
         'Нельзя создавать заказ с занятыми местами',
