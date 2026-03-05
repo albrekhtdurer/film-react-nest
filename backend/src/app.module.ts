@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as path from 'node:path';
 
 import { configProvider } from './app.config.provider';
@@ -9,10 +9,8 @@ import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { OrderService } from './order/order.service';
-import {
-  FilmsMongoDbRepository,
-  FilmSchema,
-} from './repository/films.repository';
+import { Film } from './films/entities/film.entity';
+import { Schedule } from './films/entities/schedule.entity';
 
 @Module({
   imports: [
@@ -24,15 +22,18 @@ import {
       rootPath: path.join(__dirname, '..', 'public'),
       renderPath: 'content/afisha/*',
     }),
-    MongooseModule.forRoot(process.env.DATABASE_URL),
-    MongooseModule.forFeature([{ name: 'Film', schema: FilmSchema }]),
+    TypeOrmModule.forRoot({
+      type: process.env.DATABASE_DRIVER,
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      entities: [Film, Schedule],
+      synchronize: true,
+    } as TypeOrmModuleOptions),
   ],
   controllers: [FilmsController, OrderController],
-  providers: [
-    configProvider,
-    FilmsService,
-    OrderService,
-    FilmsMongoDbRepository,
-  ],
+  providers: [configProvider, FilmsService, OrderService],
 })
 export class AppModule {}
