@@ -3,7 +3,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as path from 'node:path';
-
 import { configProvider } from './app.config.provider';
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
@@ -25,7 +24,8 @@ import { AppRepository } from './app.repository';
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_DRIVER,
-      url: process.env.DATABASE_URL,
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
