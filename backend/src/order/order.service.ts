@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FilmsMongoDbRepository } from 'src/repository/films.repository';
 import { TicketDto } from './dto/order.dto';
+import { AppRepository } from 'src/app.repository';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly filmsRepository: FilmsMongoDbRepository) {}
+  constructor(private readonly filmsRepository: AppRepository) {}
 
   private async getSessionInfos(orderItems: TicketDto[]) {
     const sessionInfos = [];

@@ -11,6 +11,7 @@ import { FilmsService } from './films/films.service';
 import { OrderService } from './order/order.service';
 import { Film } from './films/entities/film.entity';
 import { Schedule } from './films/entities/schedule.entity';
+import { AppRepository } from './app.repository';
 
 @Module({
   imports: [
@@ -30,10 +31,11 @@ import { Schedule } from './films/entities/schedule.entity';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: [Film, Schedule],
-      synchronize: true,
+      synchronize: false,
     } as TypeOrmModuleOptions),
+    TypeOrmModule.forFeature([Film, Schedule]),
   ],
   controllers: [FilmsController, OrderController],
-  providers: [configProvider, FilmsService, OrderService],
+  providers: [configProvider, FilmsService, OrderService, AppRepository],
 })
 export class AppModule {}

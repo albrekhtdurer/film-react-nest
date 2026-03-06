@@ -1,9 +1,9 @@
-import { UUID } from 'crypto';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 import { Schedule } from './schedule.entity';
+import { UUID } from 'node:crypto';
 
-@Entity()
+@Entity('films')
 export class Film {
   @PrimaryGeneratedColumn()
   id: UUID;
@@ -15,7 +15,10 @@ export class Film {
   director: string;
 
   @Column()
-  tags: string[];
+  title: string;
+
+  @Column()
+  tags: string;
 
   @Column()
   image: string;
@@ -26,6 +29,9 @@ export class Film {
   @Column()
   about: string;
 
-  @OneToMany(() => Schedule, (schedule) => schedule.filmId)
+  @Column()
+  description: string;
+
+  @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedule: Schedule[];
 }

@@ -1,8 +1,8 @@
-import { UUID } from 'crypto';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Film } from './film.entity';
+import { UUID } from 'node:crypto';
 
-@Entity()
+@Entity('schedules')
 export class Schedule {
   @PrimaryGeneratedColumn()
   id: UUID;
@@ -25,6 +25,9 @@ export class Schedule {
   @Column()
   taken: string;
 
+  @Column()
+  filmId: UUID;
+
   @ManyToOne(() => Film, (film) => film.schedule)
-  filmId: string;
+  film: Film;
 }
