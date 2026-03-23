@@ -44,9 +44,7 @@ export class AppRepository {
   }
 
   async findAll(): Promise<GetFilmDto[]> {
-    console.log('жопа');
     const items = await this.filmRepository.find();
-    console.log(items);
     return items.map(this.getFilmMapperFn());
   }
 
