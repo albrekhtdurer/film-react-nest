@@ -2,13 +2,14 @@ import { Injectable, ConsoleLogger } from '@nestjs/common';
 
 @Injectable()
 export class DevLogger extends ConsoleLogger {
+  constructor() {
+    super('DEV DEBUG');
+  }
   log(message: string) {
-    const logMessage = `[DEV DEBUG] ${message}`;
-    super.log(logMessage);
+    super.log(message);
   }
 
   error(message: string) {
-    const logMessage = `[DEV ERROR] ${message}`;
-    super.error(logMessage);
+    super.error(message);
   }
 }
