@@ -87,9 +87,11 @@ describe('FilmsController', () => {
     });
   });
 
-  it('findScheduleByFilmId() should get schedule by film id', async() => {
+  it('findScheduleByFilmId() should get schedule by film id', async () => {
     const data = await controller.findScheduleByFilmId('1');
-    const filteredMock = mockedScheduleData.filter((schedule) => schedule.id === '1');
+    const filteredMock = mockedScheduleData.filter(
+      (schedule) => schedule.id === '1',
+    );
     expect(data).toStrictEqual({
       total: filteredMock.length,
       items: filteredMock,
