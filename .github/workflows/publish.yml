@@ -26,4 +26,4 @@ jobs:
           with:
             files: |
               ./docker-compose.yml
-          push: true
+            push: true
