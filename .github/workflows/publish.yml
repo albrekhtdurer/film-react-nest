@@ -34,5 +34,5 @@ jobs:
               ./docker-compose.yml
             push: true
             set: |
-              *.variable.TAG=latest
+              ${{ env.IMAGE_NAME }}.tags=${{ steps.meta.outputs.tags }}
 
