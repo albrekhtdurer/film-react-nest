@@ -15,6 +15,8 @@ jobs:
             dockerfile_dir: frontend
           - image_name: backend
             dockerfile_dir: backend
+    permissions:
+      packages: write
 
     steps:
         - uses: actions/checkout@v4
