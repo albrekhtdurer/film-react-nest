@@ -71,6 +71,7 @@ services:
 volumes:
   pg_data:
   frontend:
+  pgadmin-data:
 
 networks:
   webnet:
