@@ -33,6 +33,9 @@ jobs:
             files: |
               ./docker-compose.yml
             push: true
+            targets: |
+            frontend
+            backend
             set: |
               ${{ env.IMAGE_NAME }}.tags=${{ steps.meta.outputs.tags }}
 
