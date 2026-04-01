@@ -59,6 +59,8 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
     - db
+    networks:
+      - webnet
 
   nginx:
     image: nginx:latest
