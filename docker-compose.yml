@@ -24,7 +24,7 @@ services:
       - webnet
     environment:
       - DATABASE_DRIVER=postgres
-      - DATABASE_HOST=postgres
+      - DATABASE_HOST=db
       - DATABASE_PORT=5432
       - DATABASE_USERNAME=prac
       - DATABASE_PASSWORD=pracpass
