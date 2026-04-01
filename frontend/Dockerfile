@@ -3,6 +3,6 @@ WORKDIR /frontend
 COPY package*.json ./
 RUN npm i
 COPY . .
-ARG VITE_API_URL="//localhost/api/afisha"
-ARG VITE_CDN_URL="//localhost/content/afisha"
+ARG VITE_API_URL="//backend/api/afisha"
+ARG VITE_CDN_URL="//backend/content/afisha"
 CMD ["npm", "run", "build"] 
