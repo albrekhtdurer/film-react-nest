@@ -6,8 +6,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: "//albrekhtdurer.nomorepartiessite.ru/api/afisha"
-        VITE_CDN_URL: "//albrekhtdurer.nomorepartiessite.ru/content/afisha"
+        VITE_API_URL: "/api/afisha"
+        VITE_CDN_URL: "/content/afisha"
     container_name: frontend
     networks:
       - webnet
