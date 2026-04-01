@@ -10,4 +10,5 @@ WORKDIR /backend
 COPY --from=builder /backend/package*.json ./
 RUN npm install --omit=dev
 COPY --from=builder /backend/dist ./dist/
+EXPOSE 3000
 CMD ["node", "./dist/main.js"]
