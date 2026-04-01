@@ -32,11 +32,13 @@ services:
     depends_on:
       - postgres
 
-  postgres:
+  db:
     image: postgres:16
-    container_name: postgres
+    container_name: db
     volumes:
       - pg_data:/data/db
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: prac
       POSTGRES_DB: prac
