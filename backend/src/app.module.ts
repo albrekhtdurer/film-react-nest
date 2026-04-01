@@ -19,7 +19,7 @@ import { AppRepository } from './app.repository';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '.', 'public'),
+      rootPath: path.join(__dirname, 'public'),
       renderPath: 'content/afisha/*',
     }),
     TypeOrmModule.forRoot({
