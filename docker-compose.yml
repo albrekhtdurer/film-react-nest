@@ -30,7 +30,7 @@ services:
       - DATABASE_PASSWORD=pracpass
       - DATABASE_NAME=prac
     depends_on:
-      - postgres
+      - db
 
   db:
     image: postgres:16
