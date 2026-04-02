@@ -22,6 +22,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/afisha');
   app.enableCors();
   app.useLogger(logger);
+  console.log('CD successful');
   await app.listen(3000);
 }
 bootstrap();
