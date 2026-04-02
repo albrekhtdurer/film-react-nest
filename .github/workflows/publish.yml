@@ -62,6 +62,8 @@ jobs:
         run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/shared/film/docker-compose.yml
       - name: copy nginx config
         run: scp nginx/nginx.conf ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/shared/film/nginx/nginx.conf
+      - name: connect and cleanup app containers
+      - run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/shared/film && docker stop frontend && docker rm frontend && docker stop film-nginx-1 && docker rm film-nginx-1 && docker stop backend && docker rm backend"
       - name: connect and compose
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/shared/film && docker compose up -d && exit"
       - name: cleanup keys
