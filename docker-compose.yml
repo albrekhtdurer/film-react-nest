@@ -1,0 +1,93 @@
+version: "3.9"
+services:
+  frontend:
+    image: ghcr.io/albrekhtdurer/film-react-nest/frontend:review-3
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "/api/afisha"
+        VITE_CDN_URL: "/content/afisha"
+    container_name: frontend
+    networks:
+      - webnet
+    volumes:
+      - ./frontend_dist:/frontend/dist
+
+  backend:
+    image: ghcr.io/albrekhtdurer/film-react-nest/backend:review-3
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    networks:
+      - webnet
+    environment:
+      - DATABASE_DRIVER=postgres
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=prac
+      - DATABASE_PASSWORD=pracpass
+      - DATABASE_NAME=prac
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: db
+    volumes:
+      - pg_data:/data/db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: prac
+      POSTGRES_DB: prac
+      POSTGRES_PASSWORD: pracpass 
+    networks:
+      - webnet
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: fearnocait@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: PlushkiHrushki
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+    - db
+    networks:
+      - webnet
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - webnet
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+      - ./frontend_dist:/frontend_nginx:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    networks:
+      - webnet
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+volumes:
+  pg_data:
+  pgadmin-data:
+
+networks:
+  webnet:
+    driver: bridge

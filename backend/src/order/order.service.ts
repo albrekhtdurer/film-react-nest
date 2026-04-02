@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { TicketDto } from './dto/order.dto';
-import { AppRepository } from 'src/app.repository';
+import { AppRepository } from '../app.repository';
 
 @Injectable()
 export class OrderService {
