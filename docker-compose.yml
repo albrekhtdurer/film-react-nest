@@ -22,7 +22,6 @@ services:
     container_name: backend
     networks:
       - webnet
-    env_file: ".env"
     environment:
       - DATABASE_DRIVER=${DATABASE_DRIVER}
       - DATABASE_HOST=${DATABASE_HOST}
@@ -31,6 +30,7 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_NAME=${DATABASE_NAME}
       - LOGGER=${LOGGER}
+    env_file: ".env"
     depends_on:
       db:
         condition: service_healthy
@@ -41,9 +41,10 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: prac
-      POSTGRES_DB: prac
-      POSTGRES_PASSWORD: pracpass 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file: ".env"
     networks:
       - webnet
     restart: unless-stopped
@@ -57,10 +58,10 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
-    env_file: ".env"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    env_file: ".env"
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
@@ -81,6 +82,8 @@ services:
       - ./certbot/www/:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/letsencrypt/:ro
       - ./frontend_dist:/frontend_nginx:ro
+    depends_on:
+      - backend
 
   certbot:
     image: certbot/certbot:latest
