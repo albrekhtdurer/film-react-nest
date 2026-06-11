@@ -22,13 +22,14 @@ services:
     container_name: backend
     networks:
       - webnet
+    env_file: ".env"
     environment:
-      - DATABASE_DRIVER=postgres
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_USERNAME=prac
-      - DATABASE_PASSWORD=pracpass
-      - DATABASE_NAME=prac
+      - DATABASE_DRIVER=${DATABASE_DRIVER}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
     depends_on:
       db:
         condition: service_healthy
@@ -55,9 +56,10 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
+    env_file: ".env"
     environment:
-      PGADMIN_DEFAULT_EMAIL: fearnocait@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: PlushkiHrushki
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
