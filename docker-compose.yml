@@ -30,28 +30,31 @@ services:
       - DATABASE_PASSWORD=pracpass
       - DATABASE_NAME=prac
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:16
     container_name: db
     volumes:
-      - pg_data:/data/db
-    ports:
-      - "5432:5432"
+      - pg_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: prac
       POSTGRES_DB: prac
       POSTGRES_PASSWORD: pracpass 
     networks:
       - webnet
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
-    ports:
-      - "8080:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: fearnocait@gmail.com
       PGADMIN_DEFAULT_PASSWORD: PlushkiHrushki
