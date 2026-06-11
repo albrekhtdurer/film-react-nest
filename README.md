@@ -1,12 +1,12 @@
 # FILM!
 
-Single-page application for an online cinema theatre. This is an educational project. The app can be found at [LINK](LINK) (NOTE: data is currently being translated to English).
+Single-page application for an online cinema theatre. This is an educational project. The app can be found at https://albrekhtdurer.nomorepartiessite.ru (NOTE: data is currently being translated to English).
 
 ## Project information and features
 
 The project was developed on top of a pre-existing frontend. I delivered the backend functionality and CI/CD features.
 
-** Tech Stack ** : Nest.js, PostgreSQL (via TypeORM), nginx, Docker.
+**Tech Stack** : Nest.js, PostgreSQL (via TypeORM), nginx, Docker.
 
 ### Features:
 
