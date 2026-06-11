@@ -1,6 +1,6 @@
 # FILM!
 
-Single-page application for an online cinema theatre. This is an educational project. The app can be found at [LINK](LINK) (NOTE: data is currently being translated to English).
+Single-page application for an online cinema theatre. This is an educational project. The app can be found at https://albrekhtdurer.nomorepartiessite.ru (NOTE: data is currently being translated to English).
 
 ## Project information and features
 
