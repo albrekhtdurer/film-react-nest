@@ -1,0 +1,71 @@
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+name: publish
+on: [push]
+jobs:
+  build-and-publish-latest:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        include:
+          - image_name: frontend
+            dockerfile_dir: frontend
+          - image_name: backend
+            dockerfile_dir: backend
+    permissions:
+      packages: write
+
+    steps:
+        - uses: actions/checkout@v4
+        - name: Log in to the Container registry
+          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          with:
+            registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v3
+        
+        - name: Extract metadata (tags, labels) for Docker
+          id: meta
+          uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+          with:
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.image_name }}
+
+        - name: Build and push Frontend image
+          uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+          with:
+            context: ./${{ matrix.dockerfile_dir }}
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+
+  deploy:
+      name: Deploy
+      runs-on: ubuntu-latest
+      needs: build-and-publish-latest
+
+      steps:
+      - uses: actions/checkout@v4
+      - name: install ssh keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      - name: create docker compose config
+        run: |
+          cat docker-compose.yml | envsubst > docker-compose-secret.yml
+      - name: copy docker compose config
+        run: scp docker-compose-secret.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/shared/film/docker-compose.yml
+      - name: copy nginx config
+        run: scp nginx/nginx.conf ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/shared/film/nginx/nginx.conf
+      - name: connect and cleanup app containers
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/shared/film && docker stop frontend && docker rm frontend && docker stop film-nginx-1 && docker rm film-nginx-1 && docker stop backend && docker rm backend"
+      - name: connect and compose
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /home/shared/film && docker compose up -d && exit"
+      - name: cleanup keys
+        if: always()
+        run: rm -rf ~/.ssh docker-compose-secret.yml

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GetFilmScheduleDto, GetFilmsDto } from './dto/films.dto';
-import { AppRepository } from 'src/app.repository';
+import { AppRepository } from '../app.repository';
 
 @Injectable()
 export class FilmsService {
