@@ -6,7 +6,7 @@ Single-page application for an online cinema theatre. This is an educational pro
 
 The project was developed on top of a pre-existing frontend. I delivered the backend functionality and CI/CD features.
 
-** Tech Stack ** : Nest.js, PostgreSQL (via TypeORM), nginx, Docker.
+**Tech Stack** : Nest.js, PostgreSQL (via TypeORM), nginx, Docker.
 
 ### Features:
 
